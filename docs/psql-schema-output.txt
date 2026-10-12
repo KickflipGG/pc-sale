@@ -1,0 +1,242 @@
+=================================================================
+ PC Sale — структура базы данных pc_sale (PostgreSQL 18)
+=================================================================
+
+--- Версия СУБД и текущая база данных ---
++------------------------------------------------------+---------+----------+
+|                        сервер                        |  база   | владелец |
++------------------------------------------------------+---------+----------+
+| PostgreSQL 18.6 on x86_64-windows, compiled by msvc- | pc_sale | postgres |
++------------------------------------------------------+---------+----------+
+(1 row)
+
+
+--- Перечень таблиц схемы public ---
+                 List of tables
++--------+-------------------+-------+----------+
+| Schema |       Name        | Type  |  Owner   |
++--------+-------------------+-------+----------+
+| public | categories        | table | postgres |
+| public | order_items       | table | postgres |
+| public | orders            | table | postgres |
+| public | products          | table | postgres |
+| public | reviews           | table | postgres |
+| public | roles             | table | postgres |
+| public | trade_in_requests | table | postgres |
+| public | users             | table | postgres |
++--------+-------------------+-------+----------+
+(8 rows)
+
+
+--- Состав столбцов всех таблиц ---
++-------------------+-------------------+---------------+----------+----------------+
+|      таблица      |      столбец      |      тип      | обязат.  |  по умолчанию  |
++-------------------+-------------------+---------------+----------+----------------+
+| categories        | category_id       | integer       | NOT NULL | nextval()      |
+| categories        | parent_id         | integer       |          |                |
+| categories        | name              | varchar(128)  | NOT NULL |                |
+| categories        | slug              | varchar(128)  | NOT NULL |                |
+| categories        | description       | text          |          |                |
+| categories        | sort_order        | smallint      | NOT NULL | 100            |
+| order_items       | item_id           | integer       | NOT NULL | nextval()      |
+| order_items       | order_id          | integer       | NOT NULL |                |
+| order_items       | product_id        | integer       | NOT NULL |                |
+| order_items       | fixed_unit_price  | numeric(10,2) | NOT NULL |                |
+| order_items       | quantity          | smallint      | NOT NULL | 1              |
+| order_items       | subtotal_amount   | numeric(10,2) | NOT NULL |                |
+| orders            | order_id          | integer       | NOT NULL | nextval()      |
+| orders            | customer_id       | integer       | NOT NULL |                |
+| orders            | order_status      | varchar(32)   | NOT NULL | 'created'::cha |
+| orders            | total_amount      | numeric(10,2) | NOT NULL |                |
+| orders            | tradein_discount  | numeric(10,2) | NOT NULL | 0.00           |
+| orders            | final_payable     | numeric(10,2) | NOT NULL |                |
+| orders            | delivery_type     | varchar(32)   | NOT NULL |                |
+| orders            | payment_method    | varchar(32)   | NOT NULL |                |
+| orders            | is_paid           | boolean       | NOT NULL | false          |
+| orders            | shipping_notes    | text          |          |                |
+| orders            | created_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| orders            | updated_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| products          | product_id        | integer       | NOT NULL | nextval()      |
+| products          | category_id       | integer       | NOT NULL |                |
+| products          | title             | varchar(255)  | NOT NULL |                |
+| products          | slug              | varchar(255)  | NOT NULL |                |
+| products          | sku_code          | varchar(64)   | NOT NULL |                |
+| products          | cpu_spec          | varchar(128)  |          |                |
+| products          | gpu_spec          | varchar(128)  |          |                |
+| products          | ram_capacity_gb   | smallint      |          |                |
+| products          | storage_spec      | varchar(255)  |          |                |
+| products          | price_retail      | numeric(10,2) | NOT NULL |                |
+| products          | stock_quantity    | integer       | NOT NULL | 0              |
+| products          | image_url         | varchar(512)  |          |                |
+| products          | is_active         | boolean       | NOT NULL | true           |
+| products          | created_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| reviews           | review_id         | integer       | NOT NULL | nextval()      |
+| reviews           | author_id         | integer       | NOT NULL |                |
+| reviews           | product_id        | integer       | NOT NULL |                |
+| reviews           | rating_score      | smallint      | NOT NULL |                |
+| reviews           | comment_text      | text          | NOT NULL |                |
+| reviews           | moderation_status | varchar(32)   | NOT NULL | 'on_moderation |
+| reviews           | created_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| roles             | role_id           | integer       | NOT NULL | nextval()      |
+| roles             | name              | varchar(32)   | NOT NULL |                |
+| trade_in_requests | tradein_id        | integer       | NOT NULL | nextval()      |
+| trade_in_requests | user_id           | integer       |          |                |
+| trade_in_requests | contact_name      | varchar(128)  | NOT NULL |                |
+| trade_in_requests | contact_phone     | varchar(20)   | NOT NULL |                |
+| trade_in_requests | device_category   | varchar(64)   | NOT NULL |                |
+| trade_in_requests | item_description  | text          | NOT NULL |                |
+| trade_in_requests | known_defects     | text          |          |                |
+| trade_in_requests | photo_urls        | text          |          |                |
+| trade_in_requests | preliminary_price | numeric(10,2) |          |                |
+| trade_in_requests | approved_price    | numeric(10,2) |          |                |
+| trade_in_requests | request_status    | varchar(32)   | NOT NULL | 'pending'::cha |
+| trade_in_requests | manager_notes     | text          |          |                |
+| trade_in_requests | created_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| users             | user_id           | integer       | NOT NULL | nextval()      |
+| users             | role_id           | integer       | NOT NULL | 2              |
+| users             | login             | varchar(64)   | NOT NULL |                |
+| users             | email             | varchar(128)  | NOT NULL |                |
+| users             | password_hash     | varchar(255)  | NOT NULL |                |
+| users             | first_name        | varchar(128)  | NOT NULL |                |
+| users             | phone_number      | varchar(20)   | NOT NULL |                |
+| users             | delivery_address  | text          |          |                |
+| users             | created_at        | timestamptz   | NOT NULL | CURRENT_TIMEST |
+| users             | is_blocked        | boolean       | NOT NULL | false          |
++-------------------+-------------------+---------------+----------+----------------+
+(70 rows)
+
+
+--- Первичные и уникальные ключи ---
++-------------------+------------------------+-------------+---------------------------+
+|      таблица      |      ограничение       |     тип     |          столбцы          |
++-------------------+------------------------+-------------+---------------------------+
+| categories        | categories_slug_key    | UNIQUE      | UNIQUE (slug)             |
+| categories        | categories_pkey        | PRIMARY KEY | PRIMARY KEY (category_id) |
+| order_items       | order_items_pkey       | PRIMARY KEY | PRIMARY KEY (item_id)     |
+| orders            | orders_pkey            | PRIMARY KEY | PRIMARY KEY (order_id)    |
+| products          | products_sku_code_key  | UNIQUE      | UNIQUE (sku_code)         |
+| products          | products_slug_key      | UNIQUE      | UNIQUE (slug)             |
+| products          | products_pkey          | PRIMARY KEY | PRIMARY KEY (product_id)  |
+| reviews           | reviews_pkey           | PRIMARY KEY | PRIMARY KEY (review_id)   |
+| roles             | roles_name_key         | UNIQUE      | UNIQUE (name)             |
+| roles             | roles_pkey             | PRIMARY KEY | PRIMARY KEY (role_id)     |
+| trade_in_requests | trade_in_requests_pkey | PRIMARY KEY | PRIMARY KEY (tradein_id)  |
+| users             | users_email_key        | UNIQUE      | UNIQUE (email)            |
+| users             | users_login_key        | UNIQUE      | UNIQUE (login)            |
+| users             | users_pkey             | PRIMARY KEY | PRIMARY KEY (user_id)     |
++-------------------+------------------------+-------------+---------------------------+
+(14 rows)
+
+
+--- Внешние ключи и правила ссылочной целостности ---
++-------------------+-------------+--------------+-----------+
+|      таблица      |   столбец   | ссылается на | ON DELETE |
++-------------------+-------------+--------------+-----------+
+| categories        | parent_id   | categories   | RESTRICT  |
+| order_items       | order_id    | orders       | CASCADE   |
+| order_items       | product_id  | products     | RESTRICT  |
+| orders            | customer_id | users        | RESTRICT  |
+| products          | category_id | categories   | RESTRICT  |
+| reviews           | author_id   | users        | CASCADE   |
+| reviews           | product_id  | products     | CASCADE   |
+| trade_in_requests | user_id     | users        | SET NULL  |
+| users             | role_id     | roles        | NO ACTION |
++-------------------+-------------+--------------+-----------+
+(9 rows)
+
+
+--- Проверочные ограничения предметной области ---
++-------------------+--------------------------+--------------------------------+
+|      таблица      |       ограничение        |          определение           |
++-------------------+--------------------------+--------------------------------+
+| order_items       | order_items_fixed_unit_p | CHECK ((fixed_unit_price >= (0 |
+| order_items       | order_items_quantity_che | CHECK ((quantity > 0))         |
+| order_items       | order_items_subtotal_amo | CHECK ((subtotal_amount >= (0) |
+| orders            | orders_final_payable_che | CHECK ((final_payable >= (0):: |
+| orders            | orders_total_amount_chec | CHECK ((total_amount >= (0)::n |
+| orders            | orders_tradein_discount_ | CHECK ((tradein_discount >= (0 |
+| products          | products_price_retail_ch | CHECK ((price_retail >= (0)::n |
+| products          | products_stock_quantity_ | CHECK ((stock_quantity >= 0))  |
+| reviews           | reviews_rating_score_che | CHECK (((rating_score >= 1) AN |
+| trade_in_requests | trade_in_requests_approv | CHECK ((approved_price >= (0): |
+| trade_in_requests | trade_in_requests_prelim | CHECK ((preliminary_price >= ( |
++-------------------+--------------------------+--------------------------------+
+(11 rows)
+
+
+--- Дополнительные индексы для ускорения поиска ---
++-------------------+----------------------------+--------------------------------+
+|      таблица      |           индекс           |          определение           |
++-------------------+----------------------------+--------------------------------+
+| categories        | idx_categories_parent_id   | btree (parent_id)              |
+| categories        | idx_categories_slug        | btree (slug)                   |
+| order_items       | idx_order_items_order_id   | btree (order_id)               |
+| order_items       | idx_order_items_product_id | btree (product_id)             |
+| orders            | idx_orders_customer_id     | btree (customer_id)            |
+| orders            | idx_orders_status_created  | btree (order_status, created_a |
+| products          | idx_products_active        | btree (is_active) WHERE is_act |
+| products          | idx_products_category_id   | btree (category_id)            |
+| products          | idx_products_title_lower   | btree (lower((title)::text))   |
+| reviews           | idx_reviews_product_id     | btree (product_id)             |
+| reviews           | idx_reviews_status         | btree (moderation_status)      |
+| trade_in_requests | idx_tradein_status         | btree (request_status)         |
+| trade_in_requests | idx_tradein_user_id        | btree (user_id)                |
+| users             | idx_users_role_id          | btree (role_id)                |
++-------------------+----------------------------+--------------------------------+
+(14 rows)
+
+
+--- Комментарии к ключевым столбцам ---
++-------------------+-------------------+----------------------------------------------+
+|      таблица      |      столбец      |                 комментарий                  |
++-------------------+-------------------+----------------------------------------------+
+| categories        | parent_id         | Родительская категория; NULL — корневой разд |
+| categories        | slug              | ЧПУ-идентификатор категории для URL          |
+| order_items       | fixed_unit_price  | Цена единицы товара на момент оформления зак |
+| orders            | order_status      | created / paid / assembled / delivered / can |
+| orders            | tradein_discount  | Скидка по программе Trade-In, руб.           |
+| orders            | final_payable     | Итог к оплате: total_amount - tradein_discou |
+| products          | price_retail      | Розничная цена, руб.                         |
+| products          | stock_quantity    | Остаток на складе, шт.                       |
+| reviews           | moderation_status | on_moderation / published / rejected         |
+| roles             | name              | Системное имя роли: guest, client, manager,  |
+| trade_in_requests | photo_urls        | Список ссылок на фото, разделитель — запятая |
+| trade_in_requests | request_status    | pending / approved / rejected / completed    |
+| users             | password_hash     | Хеш пароля (PBKDF2-HMAC-SHA256, соль в соста |
+| users             | is_blocked        | Признак блокировки учётной записи администра |
++-------------------+-------------------+----------------------------------------------+
+(14 rows)
+
+
+--- Количество записей в таблицах ---
++-------------------+---------+
+|      таблица      | записей |
++-------------------+---------+
+| categories        |      19 |
+| order_items       |       3 |
+| orders            |       3 |
+| products          |      21 |
+| reviews           |       4 |
+| roles             |       4 |
+| trade_in_requests |       3 |
+| users             |       4 |
++-------------------+---------+
+(8 rows)
+
+
+--- Пример данных: первые пять товаров каталога ---
++----+---------------------+--------------------------------------+-----------+-------+
+| id |      категория      |             наименование             |   цена    | склад |
++----+---------------------+--------------------------------------+-----------+-------+
+|  1 | Офисные ПК          | Офисный ПК (Intel Core i7-3770/Intel |  14000.00 |    12 |
+|  2 | Офисные ПК          | Офисный ПК (AMD Ryzen 5 5600G/Radeon |  22000.00 |     8 |
+|  3 | ПК для дома и учёбы | Средне-бюджетный ПК (Intel Core i5-1 |  55000.00 |     6 |
+|  4 | ПК для дома и учёбы | Средне-бюджетный ПК (AMD Ryzen 5 750 |  75000.00 |     5 |
+|  5 | Мощные игровые ПК   | Игровой ПК (AMD Ryzen 7 9800X3D/64 Г | 210000.00 |     3 |
++----+---------------------+--------------------------------------+-----------+-------+
+(5 rows)
+
+
+=================================================================
+ Конец отчёта о структуре базы данных
+=================================================================
