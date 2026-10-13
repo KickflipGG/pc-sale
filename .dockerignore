@@ -1,35 +1,60 @@
+# Всё лишнее не отправляется на демон-сервер Docker.
+# Шаблоны без «**/» действуют только от корня контекста, поэтому
+# вложенные каталоги перечислены отдельно.
+
+# система контроля версий и служебные каталоги разработки
 .git
 .github
 .gitignore
-
-# служебные каталоги разработки
 .scratch
-.venv
-venv
-env
-__pycache__
-*.pyc
-*.pyo
+.vscode
+**/.vscode
+.idea
+**/.idea
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# зависимости и виртуальные окружения
 node_modules
+frontend/node_modules
+**/node_modules
+.venv
+backend/.venv
+**/.venv
+venv
+**/venv
+env
+**/env
+
+# результаты сборки
 dist
+frontend/dist
+**/dist
 .vite
+**/.vite
+
+# байт-код Python
+__pycache__
+**/__pycache__
+*.pyc
+**/*.pyc
+*.pyo
+**/*.pyo
 
 # переменные окружения и секреты
 .env
+**/.env
 .env.*
-!.env.example
+!backend/.env.example
 
-# документация и материалы, не нужные для сборки
+# материалы, не участвующие в сборке образа
 docs
 screens_from_figma
 images_from_figma
 *.docx
+**/*.docx
 *.pdf
+**/*.pdf
 *.md
-
-# редакторы и операционная система
-.vscode
-.idea
-Thumbs.db
-Desktop.ini
-.DS_Store
+**/*.md
