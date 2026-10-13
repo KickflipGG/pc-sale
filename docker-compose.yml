@@ -5,7 +5,10 @@ services:
     environment:
       POSTGRES_PASSWORD: admin
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # Начиная с PostgreSQL 18 образ хранит данные в подкаталоге с номером
+      # версии, поэтому том подключается к /var/lib/postgresql, а не к
+      # /var/lib/postgresql/data, как было в версиях 17 и ниже.
+      - pgdata:/var/lib/postgresql
       # при первом запуске PostgreSQL выполняет эти скрипты автоматически
       - ./backend/database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
       - ./backend/database/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
