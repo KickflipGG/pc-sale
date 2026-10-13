@@ -1,0 +1,35 @@
+.git
+.github
+.gitignore
+
+# служебные каталоги разработки
+.scratch
+.venv
+venv
+env
+__pycache__
+*.pyc
+*.pyo
+node_modules
+dist
+.vite
+
+# переменные окружения и секреты
+.env
+.env.*
+!.env.example
+
+# документация и материалы, не нужные для сборки
+docs
+screens_from_figma
+images_from_figma
+*.docx
+*.pdf
+*.md
+
+# редакторы и операционная система
+.vscode
+.idea
+Thumbs.db
+Desktop.ini
+.DS_Store
