@@ -74,8 +74,17 @@ jobs:
             curl -sf http://127.0.0.1:8000/api/health && break
             sleep 1
           done
-          cd ..
-          python tools/smoke_test_api.py
+
+          for route in api/health api/categories api/products api/products/office-pc-i7-3770; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/$route")
+            echo "$route -> $code"
+            test "$code" = "200"
+          done
+
+          count=$(curl -s "http://127.0.0.1:8000/api/products" | python -c "import json,sys; print(json.load(sys.stdin)['total'])")
+          echo "товаров в каталоге: $count"
+          test "$count" = "21"
+
           kill $SERVER_PID
 
   build:

@@ -46,7 +46,6 @@ __pycache__
 .env
 **/.env
 .env.*
-!backend/.env.example
 
 # материалы, не участвующие в сборке образа
 docs
