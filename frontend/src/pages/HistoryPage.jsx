@@ -40,6 +40,7 @@ export default function HistoryPage() {
           <Icon name="clock" />
         </span>
         <h1>История покупок</h1>
+        <meta name="robots" content="noindex" />
       </div>
 
       {error && <div className="alert alert--error">{error}</div>}

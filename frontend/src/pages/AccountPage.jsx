@@ -35,6 +35,7 @@ export default function AccountPage() {
           <Icon name="user" />
         </span>
         <h1>Личный кабинет</h1>
+        <meta name="robots" content="noindex" />
       </div>
 
       {message && <div className={`alert alert--${message.type}`}>{message.text}</div>}

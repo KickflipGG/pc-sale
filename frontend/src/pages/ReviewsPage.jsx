@@ -48,6 +48,7 @@ export default function ReviewsPage() {
             <Icon name="chat" />
           </span>
           <h1>Отзывы</h1>
+          <meta name="robots" content="noindex" />
         </span>
         <input
           type="search"
