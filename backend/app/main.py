@@ -10,7 +10,7 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
@@ -106,6 +106,12 @@ def health_check() -> HealthOut:
         database=f"PostgreSQL {version}",
     )
 
+@app.middleware("http")
+async def noindex_api(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api"):
+        response.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return response
 
 # Собранный интерфейс подключается последним, чтобы не перекрывать маршруты /api
 if FRONTEND_DIST.is_dir():
