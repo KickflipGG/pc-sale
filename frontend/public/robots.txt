@@ -1,5 +1,8 @@
 User-agent: *
-Disallow: /admin/
-Allow: /admin/help
-Sitemap: https://site.com/sitemap.xml
-Clean-param: utm_source&utm_medium
+Disallow: /account
+Disallow: /cart
+Disallow: /checkout
+Disallow: /payment
+Disallow: /order-success/
+Disallow: /login
+Disallow: /api

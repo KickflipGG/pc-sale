@@ -975,10 +975,12 @@ main.container {
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 16px 20px;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
-  margin: 20px 0 20px;
+  margin: 0;
 }
+
+.account-hero h1 { font-size: inherit; }
 
 .account-icon {
   width: 34px;
