@@ -6,3 +6,4 @@ Disallow: /payment
 Disallow: /order-success/
 Disallow: /login
 Disallow: /api
+Sitemap: https://example.com/sitemap.xml
