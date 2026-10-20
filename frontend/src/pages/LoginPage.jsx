@@ -15,6 +15,7 @@ export default function LoginPage() {
           <p className="section-subtitle">
             Авторизуйтесь, чтобы видеть историю покупок, оформлять заказы и оставлять отзывы.
           </p>
+          <meta name="robots" content="noindex" />
         </div>
       </div>
 

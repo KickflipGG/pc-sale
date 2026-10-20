@@ -47,7 +47,8 @@ export default function ReviewsPage() {
           <span className="account-icon">
             <Icon name="chat" />
           </span>
-          Отзывы
+          <h1>Отзывы</h1>
+          <meta name="robots" content="noindex" />
         </span>
         <input
           type="search"
