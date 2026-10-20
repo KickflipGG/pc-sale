@@ -34,7 +34,7 @@ export default function AccountPage() {
         <span className="account-icon">
           <Icon name="user" />
         </span>
-        Личный кабинет
+        <h1>Личный кабинет</h1>
       </div>
 
       {message && <div className={`alert alert--${message.type}`}>{message.text}</div>}

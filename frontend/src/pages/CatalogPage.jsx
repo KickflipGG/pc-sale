@@ -180,7 +180,7 @@ export default function CatalogPage() {
         </>
       ) : (
         <div className="empty-state">
-          <h3>Ничего не найдено</h3>
+          <h2>Ничего не найдено</h2>
           <p>Измените поисковый запрос или выберите другую категорию каталога.</p>
         </div>
       )}

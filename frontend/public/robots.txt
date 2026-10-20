@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Allow: /admin/help
+Sitemap: https://site.com/sitemap.xml
+Clean-param: utm_source&utm_medium

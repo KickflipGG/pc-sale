@@ -21,7 +21,7 @@ export default function CartPage() {
           <span className="account-icon">
             <Icon name="cart" />
           </span>
-          Корзина
+          <h1>Корзина</h1>
         </div>
         <div className="empty-state">
           <h3>Корзина пуста</h3>
@@ -46,7 +46,7 @@ export default function CartPage() {
         <span className="account-icon">
           <Icon name="cart" />
         </span>
-        Корзина
+        <h1>Корзина</h1>
       </div>
 
       <div className="layout-2col">

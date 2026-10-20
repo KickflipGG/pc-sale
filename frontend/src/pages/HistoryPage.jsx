@@ -39,7 +39,7 @@ export default function HistoryPage() {
         <span className="account-icon">
           <Icon name="clock" />
         </span>
-        История покупок
+        <h1>История покупок</h1>
       </div>
 
       {error && <div className="alert alert--error">{error}</div>}
