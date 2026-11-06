@@ -1,0 +1,74 @@
+# Продакшен-схема проекта PC Sale: база, API и nginx как единая точка входа.
+# Значения переменных берутся из файла deploy/.env (в репозиторий не попадает).
+#
+# Запуск:  docker compose up --build -d
+# Проверка: docker compose ps
+# Журналы:  docker compose logs <сервис>
+# Остановка: docker compose down
+
+name: pc-sale-deploy
+
+services:
+  # База данных. Наружу не публикуется: доступна только внутри сети проекта.
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      # POSTGRES_DB намеренно не передаётся: скрипт схемы сам создаёт базу
+      # pc_sale (в нём есть CREATE DATABASE). Если передать имя базы здесь,
+      # entrypoint подключится к ней и DROP DATABASE внутри скрипта упадёт
+      # с ошибкой «cannot drop the currently open database»
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      # В PostgreSQL 18 данные лежат в подкаталоге с номером версии,
+      # поэтому том подключается к /var/lib/postgresql, а не к .../data
+      - pgdata:/var/lib/postgresql
+      # Схема и демонстрационные данные загружаются при первом запуске
+      - ../backend/database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ../backend/database/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Серверная часть: только API на uvicorn, без --reload.
+  # Портов наружу нет — снаружи виден только nginx.
+  app:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      # Интерфейс и API на одном домене, поэтому CORS нужен только для отладки
+      CORS_ORIGINS: https://pc-sale.localhost
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Единственный сервис, доступный с компьютера.
+  # Отдаёт собранный интерфейс и проксирует /api/ в app.
+  nginx:
+    build:
+      context: ..
+      dockerfile: deploy/nginx/Dockerfile
+      args:
+        VITE_API_URL: ""
+    restart: unless-stopped
+    ports:
+      # Привязка к 127.0.0.1: проект доступен только с этого компьютера,
+      # а не из локальной сети
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
