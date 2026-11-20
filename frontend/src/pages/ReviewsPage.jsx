@@ -73,7 +73,7 @@ export default function ReviewsPage() {
         <div className="empty-state">Загрузка отзывов…</div>
       ) : filtered.length === 0 ? (
         <div className="empty-state">
-          <h3>Отзывов пока нет</h3>
+          <h2>Отзывов пока нет</h2>
           <p>Отзыв можно оставить на странице купленного товара.</p>
           <Link to="/account/history" className="btn btn--primary" style={{ marginTop: 16 }}>
             История покупок

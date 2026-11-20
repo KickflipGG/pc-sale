@@ -466,6 +466,13 @@ main.container {
   border-color: var(--accent);
 }
 
+/* Заглушка на время загрузки товаров: держит высоту карточки,
+   чтобы сетка не появлялась «из воздуха» и страница не прыгала */
+.product-card--skeleton {
+  min-height: 300px;
+  background: var(--bg-alt);
+}
+
 .product-card__media {
   position: relative;
   background: var(--bg-alt);
@@ -543,7 +550,9 @@ main.container {
   border-top: 1px solid var(--line);
 }
 
-.spec-list li {
+/* Группы dt/dd внутри dl оборачиваются в div — так требует разметка
+   списка определений, li здесь недопустим */
+.spec-list > div {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -1144,6 +1153,7 @@ main.container {
   margin-top: 20px;
 }
 
+.empty-state h2,
 .empty-state h3 {
   font-size: 17px;
   margin-bottom: 8px;
@@ -1223,7 +1233,9 @@ main.container {
 
 .info-row__label {
   font-size: 10.5px;
-  color: var(--muted-light);
+  /* Было --muted-light (#8a93a1): на белом давало контраст 3,1:1,
+     а для мелкого текста требуется не ниже 4,5:1 */
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 700;

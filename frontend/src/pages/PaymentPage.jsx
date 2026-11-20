@@ -36,7 +36,7 @@ export default function PaymentPage() {
   if (!draft || items.length === 0) {
     return (
       <div className="empty-state">
-        <h3>Нет данных для оплаты</h3>
+        <h2>Нет данных для оплаты</h2>
         <p>Вернитесь в корзину и оформите заказ заново.</p>
         <Link to="/cart" className="btn btn--primary" style={{ marginTop: 16 }}>
           В корзину

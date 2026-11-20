@@ -49,7 +49,7 @@ export default function HistoryPage() {
         <div className="empty-state">Загрузка заказов…</div>
       ) : orders.length === 0 ? (
         <div className="empty-state">
-          <h3>Покупок пока нет</h3>
+          <h2>Покупок пока нет</h2>
           <p>Оформленные заказы появятся здесь вместе со статусом доставки.</p>
           <Link to="/" className="btn btn--primary" style={{ marginTop: 16 }}>
             В каталог

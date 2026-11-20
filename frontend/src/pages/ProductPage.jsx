@@ -67,7 +67,15 @@ export default function ProductPage() {
     }
   }
 
-  if (loading) return <div className="empty-state">Загрузка товара…</div>;
+  // Заглушка занимает примерно столько же места, сколько карточка товара:
+  // иначе после загрузки данных страница резко вырастает и элементы сдвигаются
+  if (loading) {
+    return (
+      <div className="panel" style={{ minHeight: 700 }} aria-busy="true">
+        <div className="small muted">Загрузка товара…</div>
+      </div>
+    );
+  }
   if (error) return <div className="alert alert--error">{error}</div>;
   if (!product) return null;
 
@@ -131,10 +139,10 @@ export default function ProductPage() {
 
             <dl className="spec-list" style={{ marginBottom: 20 }}>
               {specs.map(([label, value]) => (
-                <li key={label}>
+                <div key={label}>
                   <dt>{label}</dt>
                   <dd>{value}</dd>
-                </li>
+                </div>
               ))}
             </dl>
 

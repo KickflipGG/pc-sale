@@ -36,10 +36,10 @@ export default function ProductCard({ product, categoryName }) {
         {specs.length > 0 && (
           <dl className="spec-list">
             {specs.map(([label, value]) => (
-              <li key={label}>
+              <div key={label}>
                 <dt>{label}</dt>
                 <dd>{value}</dd>
-              </li>
+              </div>
             ))}
           </dl>
         )}

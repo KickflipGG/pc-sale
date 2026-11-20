@@ -50,7 +50,7 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="empty-state">
-        <h3>Корзина пуста</h3>
+        <h2>Корзина пуста</h2>
         <p>Добавьте товары, чтобы перейти к оформлению заказа.</p>
         <Link to="/" className="btn btn--primary" style={{ marginTop: 16 }}>
           В каталог

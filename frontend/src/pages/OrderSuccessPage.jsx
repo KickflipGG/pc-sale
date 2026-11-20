@@ -35,7 +35,7 @@ export default function OrderSuccessPage() {
   if (error) {
     return (
       <div className="empty-state">
-        <h3>{error}</h3>
+        <h2>{error}</h2>
         <Link to="/account/history" className="btn btn--primary" style={{ marginTop: 16 }}>
           История покупок
         </Link>

@@ -46,13 +46,19 @@ export default function AuthModal({ onClose, onSuccess }) {
 
   return (
     <div className="modal-backdrop" onClick={onClose} role="presentation">
-      <div className="modal" onClick={(event) => event.stopPropagation()} role="dialog">
+      <div
+        className="modal"
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+      >
         <button type="button" className="modal__close" onClick={onClose} aria-label="Закрыть">
           <Icon name="close" size={14} />
         </button>
 
         <div className="modal__logo">PC</div>
-        <h2 className="modal__title">Личный кабинет</h2>
+        <h2 className="modal__title" id="auth-modal-title">Личный кабинет</h2>
         <p className="modal__subtitle">
           {mode === "login" ? "Вход в аккаунт" : "Создание нового аккаунта"}
         </p>

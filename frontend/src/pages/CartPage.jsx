@@ -24,7 +24,7 @@ export default function CartPage() {
           <h1>Корзина</h1>
         </div>
         <div className="empty-state">
-          <h3>Корзина пуста</h3>
+          <h2>Корзина пуста</h2>
           <p>Добавьте товары из каталога — мы сохраним их до оформления заказа.</p>
           <Link to="/" className="btn btn--primary" style={{ marginTop: 16 }}>
             Перейти в каталог

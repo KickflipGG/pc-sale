@@ -146,7 +146,13 @@ export default function CatalogPage() {
       {error && <div className="alert alert--error">{error}</div>}
 
       {loading ? (
-        <div className="empty-state">Загрузка товаров…</div>
+        // Заглушки держат высоту будущей сетки: без них страница
+        // «прыгает», когда товары появляются после ответа API
+        <div className="card-grid card-grid--products" style={{ marginTop: 22 }} aria-busy="true">
+          {Array.from({ length: 4 }, (_, index) => (
+            <div key={index} className="product-card product-card--skeleton" />
+          ))}
+        </div>
       ) : data && data.items.length > 0 ? (
         <>
           <div className="card-grid card-grid--products" style={{ marginTop: 22 }}>
