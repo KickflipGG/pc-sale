@@ -106,8 +106,8 @@ jobs:
             file: ./backend/Dockerfile
           - name: web
             image: kickflipgg/pc-sale-web
-            context: .
-            file: ./deploy/nginx/Dockerfile
+            context: ./frontend
+            file: ./frontend/Dockerfile
 
     steps:
       - name: Получение исходного кода
